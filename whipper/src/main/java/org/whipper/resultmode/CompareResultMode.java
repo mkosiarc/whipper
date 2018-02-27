@@ -9,6 +9,7 @@ import org.whipper.ExpectedResultHolder;
 import org.whipper.Query;
 import org.whipper.Whipper;
 import org.whipper.WhipperProperties;
+import org.whipper.utils.OverrideFileSelector;
 import org.whipper.xml.XmlHelper;
 
 /**
@@ -50,6 +51,10 @@ public class CompareResultMode implements ResultMode {
         return q.getScenario().getId() + File.separator + "errors_for_" + getName() + File.separator + q.getSuite().getId() + "_" + q.getId();
     }
 
+    private String getExpectedResultFileName(Query q){
+        return q.getSuite().getId() + File.separator + q.getSuite().getId() + "_" + q.getId() + ".xml";
+    }
+        
     @Override
     public File getErrorFile(Query q){
         return new File(outputDirectory, getFileName(q) + "_error.xml");
@@ -57,9 +62,9 @@ public class CompareResultMode implements ResultMode {
 
     @Override
     public ResultHolder handleResult(Query q){
-        File result = new File(q.getScenario().getExpectedResultsDir(),
-                q.getSuite().getId() + File.separator + q.getSuite().getId() + "_" + q.getId() + ".xml");
         ResultHolder out = new ResultHolder();
+        OverrideFileSelector selector = new OverrideFileSelector(q.getScenario().getExpectedResultsDir());
+        File result = selector.getExpectedResultFile(getExpectedResultFileName(q));
         try{
             holder.buildResult(result, q);
             boolean eq = holder.equals(q.getActualResult(), !q.getSql().toUpperCase().contains(" ORDER BY "), allowedDivergence);

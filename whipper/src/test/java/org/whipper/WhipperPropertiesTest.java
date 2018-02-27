@@ -200,6 +200,18 @@ public class WhipperPropertiesTest{
         p.setArtifactsDir("a");
         Assertions.assertNotNull(p.getArtifactsDir(), "Set to 'a'.");
     }
+    
+    /*@Test
+    public void getExpectedDirTest(){
+        WhipperProperties p = new WhipperProperties();
+        Assertions.assertNull(p.getExpectedResultsDir(), "Default is null.");
+        p.setExpectedResultsDir("  a   , b,c  , d ");
+        Scenario s = new Scenario ("madeUpScenario");
+        s.init(p);
+        Query q = new Query(s,null,null,null,null,null);
+        List <File> files = q.getScenario().getExpectedResultsDir();
+        Assertions.assertNotNull(p.getArtifactsDir(), "Set to 'a'.");
+    }*/
 
     @Test
     public void getIncludeScenarioTest(){
