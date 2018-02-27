@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +49,6 @@ public class Scenario implements TimeTracker{
     private long timeForOneQuery;
     private boolean fastFail;
 
-    private File expectedResultsDir;
     private String expectedResultsDirName;
     private String querysetDirName;
     private File outputDir;
@@ -89,13 +90,7 @@ public class Scenario implements TimeTracker{
         afterQuery = initialProperties.getAfterQuery();
         expectedResultsDirName = initialProperties.getExpectedResultsDir();
         querysetDirName = initialProperties.getQuerySetDir();
-        expectedResultsDir = new File(initialProperties.getArtifactsDir(),
-                querysetDirName + File.separator + expectedResultsDirName);
-        if(!expectedResultsDir.exists() || !expectedResultsDir.isDirectory()){
-            throw new IllegalArgumentException("Expected results directory " + expectedResultsDir +
-                    " either does not exist or is not a directory.");
-        }
-
+        
         outputDir = new File(initialProperties.getOutputDir(), id);
         if(!outputDir.exists() && !outputDir.mkdirs()){
             throw new RuntimeException("Cannot create output directory " + outputDir.getAbsolutePath());
@@ -172,12 +167,24 @@ public class Scenario implements TimeTracker{
     }
 
     /**
-     * Returns file with expected results.
+     * Returns List of files with expected results directories.
      *
-     * @return file with expected results
+     * @return List of files with expected results directories. 
      */
-    public File getExpectedResultsDir() {
-        return expectedResultsDir;
+    public ArrayList<File> getExpectedResultsDir() {  
+        List <String> dirNames = Arrays.asList(expectedResultsDirName.split(","));
+        ArrayList <File> dirs = new ArrayList<>();
+        File dir;
+        for(String dirName : dirNames) {
+            dir = new File(initialProperties.getArtifactsDir(),
+                querysetDirName + File.separator + dirName);
+            dirs.add(dir);
+            if(!dir.isDirectory()){
+                throw new IllegalArgumentException("Expected results directory " + dir +
+                        " either does not exist or is not a directory.");
+            }
+        }
+        return dirs;
     }
 
     /**
