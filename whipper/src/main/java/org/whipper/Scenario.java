@@ -172,7 +172,7 @@ public class Scenario implements TimeTracker{
      * @return List of files with expected results directories. 
      */
     public ArrayList<File> getExpectedResultsDir() {  
-        List <String> dirNames = Arrays.asList(expectedResultsDirName.trim().split("\\s*,\\s*"));
+        List <String> dirNames = Arrays.asList(expectedResultsDirName.split(","));
         ArrayList <File> dirs = new ArrayList<>();
         File dir;
         for(String dirName : dirNames) {

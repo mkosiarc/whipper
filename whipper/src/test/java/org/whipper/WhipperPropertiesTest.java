@@ -200,6 +200,14 @@ public class WhipperPropertiesTest{
         p.setArtifactsDir("a");
         Assertions.assertNotNull(p.getArtifactsDir(), "Set to 'a'.");
     }
+    
+    @Test
+    public void getExpectedDirTest(){
+        WhipperProperties p = new WhipperProperties();
+        Assertions.assertNull(p.getArtifactsDir(), "Default is null.");
+        p.setExpectedResultsDir(" a,  b  , c ,d  ");
+        Assertions.assertEquals("a,b,c,d", p.getExpectedResultsDir() , "The result should have trimmed white space");
+    }
 
     @Test
     public void getIncludeScenarioTest(){
